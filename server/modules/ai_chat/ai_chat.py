@@ -15,27 +15,20 @@ def ai_chat_generator(request: Optional[list]):
             raise KeyError("text not found.")
 
         else:
-            raw_text = request
+            raw_text = request[0]
 
             # remove bullets, numbers, etc.. from text
-            filtered_topic = filter_text_using_regex(text=raw_text)
-            prompt = ai_chat_prompts(course=course)
+            # text = filter_text_using_regex(text=raw_text)
+            prompt = ai_chat_prompts(text=raw_text)
 
             # gpt-generated completion
             gpt_generated_text = get_text_from_openai(
-                prompt=prompt, temperature=1, max_tokens=300
+                prompt=prompt, temperature=1, max_tokens=3000
             )
-
-            # split results
-            result = [data.strip() for data in gpt_generated_text.split("\n") if data]
-            lesson_dictionary.append(
-                {"prompt": {"course": course, "topic": topic}, "completion": result}
-            )
-
             response = {
                 "status_code": 200,
                 "message": "Lesson was Generated Successfully.",
-                "data": lesson_dictionary,
+                "data": gpt_generated_text,
             }
 
     except Exception as e:
