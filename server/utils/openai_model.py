@@ -24,7 +24,8 @@ def get_text_from_openai(
             max_tokens=250,
             top_p=1,
             frequency_penalty=0,
-            presence_penalty=0
+            presence_penalty=0,
+            stop=["###"]
         )
         response = gpt_response.choices[0].message.content
         return response

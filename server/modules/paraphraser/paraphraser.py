@@ -25,6 +25,7 @@ def paraphrase_text_generator(request: Optional[list]):
             gpt_generated_text = get_text_from_openai(
                 prompt=prompt, temperature=1, max_tokens=3000
             )
+
             response = {
                 "status_code": 200,
                 "message": "Lesson was Generated Successfully.",
