@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from server.prompts.translate_text_prompts import translate_text_prompts
 from server.utils.filter_text import filter_text_using_regex
 from server.utils.openai_model import get_text_from_openai
+from server.utils.language_trans import text_translate
 
 translate_text_generation = APIRouter()
 
@@ -16,19 +17,13 @@ def translate_text_generator(request: Optional[list]):
 
         else:
             raw_text = request[0]
-
-            # remove bullets, numbers, etc.. from text
-            # text = filter_text_using_regex(text=raw_text)
-            prompt = translate_text_prompts(text=raw_text)
-
-            # gpt-generated completion
-            gpt_generated_text = get_text_from_openai(
-                prompt=prompt, temperature=1, max_tokens=3000
-            )
+            to_lang = request[1].strip()
+            
+            translated_text = text_translate(text=raw_text, to_lang=to_lang)
             response = {
                 "status_code": 200,
                 "message": "Lesson was Generated Successfully.",
-                "data": gpt_generated_text,
+                "data": translated_text,
             }
 
     except Exception as e:
